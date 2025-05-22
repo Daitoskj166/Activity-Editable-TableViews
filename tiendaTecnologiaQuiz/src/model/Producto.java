@@ -1,48 +1,71 @@
 package model;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class Producto {
-    private int referencia;
-    private String nombre;
-    private double precio;
-    private int cantidad;
+    private final IntegerProperty referencia = new SimpleIntegerProperty();
+    private final StringProperty nombre = new SimpleStringProperty();
+    private final DoubleProperty precio = new SimpleDoubleProperty();
+    private final IntegerProperty cantidad = new SimpleIntegerProperty();
 
     public Producto(int referencia, String nombre, double precio, int cantidad) {
-        this.referencia = referencia;
-        this.nombre = nombre;
-        this.precio = precio;
-        this.cantidad = cantidad;
+        this.referencia.set(referencia);
+        this.nombre.set(nombre);
+        this.precio.set(precio);
+        this.cantidad.set(cantidad);
     }
 
-	public int getReferencia() {
-		return referencia;
-	}
+    // Getters, setters, and property methods
+    public int getReferencia() {
+        return referencia.get();
+    }
 
-	public void setReferencia(int referencia) {
-		this.referencia = referencia;
-	}
+    public void setReferencia(int referencia) {
+        this.referencia.set(referencia);
+    }
 
-	public String getNombre() {
-		return nombre;
-	}
+    public IntegerProperty referenciaProperty() {
+        return referencia;
+    }
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+    public String getNombre() {
+        return nombre.get();
+    }
 
-	public double getPrecio() {
-		return precio;
-	}
+    public void setNombre(String nombre) {
+        this.nombre.set(nombre);
+    }
 
-	public void setPrecio(double precio) {
-		this.precio = precio;
-	}
+    public StringProperty nombreProperty() {
+        return nombre;
+    }
 
-	public int getCantidad() {
-		return cantidad;
-	}
+    public double getPrecio() {
+        return precio.get();
+    }
 
-	public void setCantidad(int cantidad) {
-		this.cantidad = cantidad;
-	}
+    public void setPrecio(double precio) {
+        this.precio.set(precio);
+    }
 
+    public DoubleProperty precioProperty() {
+        return precio;
+    }
+
+    public int getCantidad() {
+        return cantidad.get();
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad.set(cantidad);
+    }
+
+    public IntegerProperty cantidadProperty() {
+        return cantidad;
+    }
 }

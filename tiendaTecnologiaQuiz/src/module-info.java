@@ -7,6 +7,7 @@ module tiendaElectronicaQuiz {
 	requires javafx.graphics;
 	requires poi;
 	requires poi.ooxml;
+	requires com.oracle.database.jdbc;
 	
 	opens controller;
 	opens application to javafx.graphics, javafx.fxml;

@@ -1,5 +1,6 @@
 package data;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -17,35 +18,29 @@ public class UsuarioDAO {
 		this.connection = connection;
 	}
 
-	public boolean authenticate(String nickname, String contraseña, String rol) {
+	  public boolean authenticate(String nickname, String contraseña, String rol) {
+	       //String sql = "SELECT * FROM ProgrammingII.Usuario WHERE nickname=? AND contraseña=? AND rol=?";
 
-		String sql = "SELECT * FROM ProgrammingII.Usuario WHERE nickname=? AND contraseña=? AND rol=?";
+	       String sql = "{ ? = call PROGRAMMINGII.AuthenticateUsuario(?,?,?) }";
+	       
+	       try (CallableStatement stmt = connection.prepareCall(sql)) {
+	           stmt.registerOutParameter(1, java.sql.Types.INTEGER);
+	           stmt.setString(2, nickname);
+	           stmt.setString(3, contraseña);
+	           stmt.setString(4, rol);
+	           
+	           stmt.execute();
+	           int result = stmt.getInt(1);
+	           
+	           return result==1;
 
-		try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+	           //ResultSet rs = stmt.executeQuery();    
 
-			stmt.setString(1, nickname);
+	       } catch (SQLException e) {
+	           e.printStackTrace();
+	       }
 
-			stmt.setString(2, contraseña);
-
-			stmt.setString(3, rol);
-
-			ResultSet rs = stmt.executeQuery();
-
-			if (rs.next()) {
-
-				return rs.getString("nickname").equals(nickname) && rs.getString("contraseña").equals(contraseña)
-						&& rs.getString("rol").equals(rol);
-
-			}
-
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-
-		}
-
-		return false;
-
-	}
+	       return false;
+	   }
 
 }
