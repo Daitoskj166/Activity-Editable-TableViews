@@ -81,7 +81,7 @@ public class RegistroProductosController {
         columnNombre.setOnEditCommit(event -> {
             Producto product = event.getRowValue();
             product.setNombre(event.getNewValue());
-            updateProductInDatabase(product);
+            productoDAO.update(product);
         });
 
         columnPrecio.setCellValueFactory(new PropertyValueFactory<>("precio"));
@@ -89,46 +89,19 @@ public class RegistroProductosController {
         columnPrecio.setOnEditCommit(event -> {
             Producto product = event.getRowValue();
             product.setPrecio(event.getNewValue());
-            updateProductInDatabase(product);
-        });
+            productoDAO.update(product);        });
 
         columnCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
         columnCantidad.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         columnCantidad.setOnEditCommit(event -> {
             Producto product = event.getRowValue();
             product.setCantidad(event.getNewValue());
-            updateProductInDatabase(product);
-        });
+            productoDAO.update(product);        });
 
         // Set data to TableView
         tableProductos.setItems(availableProductos);
     }
 
-    // Method to update product in the database using the stored procedure
-    private void updateProductInDatabase(Producto product) {
-        String sql = "{call UpdateProduct(?, ?, ?, ?, ?)}";
-        try (CallableStatement stmt = connection.prepareCall(sql)) {
-            stmt.setInt(1, product.getReferencia());
-            stmt.setString(2, product.getNombre());
-            stmt.setDouble(3, product.getPrecio());
-            stmt.setInt(4, product.getCantidad());
-            // Assuming the 5th parameter is a placeholder or unused, set it to null or a default value
-            stmt.setString(5, null); // Adjust based on your stored procedure definition
-
-            stmt.executeUpdate();
-
-            // Show notification
-            Main.showAlert("Actualización Exitosa", "Producto Actualizado",
-                    "El producto se actualizó correctamente en la base de datos.",
-                    Alert.AlertType.INFORMATION);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Main.showAlert("Error", "Error al Actualizar",
-                    "No se pudo actualizar el producto: " + e.getMessage(),
-                    Alert.AlertType.ERROR);
-        }
-    }
 
     private void cargarProductos() {
         ObservableList<Producto> availableProductos = FXCollections.observableArrayList();

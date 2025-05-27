@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import application.Main;
+import javafx.scene.control.Alert.AlertType;
 import model.Producto;
 
 
@@ -78,20 +79,30 @@ public class ProductoDAO {
 	}
 
 	
-	public void update(Producto producto) {
-        //String sql = "UPDATE ProgrammingII.Producto SET nombre=?, precio=?, cantidad=? WHERE referencia=?";
-        String sql = "{call ProgrammingII.UpdateProduct(?, ?, ?, ?)} ";
-		try (CallableStatement stmt = connection.prepareCall(sql)) {
-        	stmt.setString(1, producto.getNombre());
-        	stmt.setDouble(2, producto.getPrecio());
-        	stmt.setInt(3, producto.getCantidad());
-        	stmt.setInt(4, producto.getReferencia());
-        	stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-		
-	}
+	 public void update(Producto producto) {
+
+		//String sql = "UPDATE ProgrammingII.Producto SET nombre=?, precio=?, cantidad=? WHERE referencia=?";
+		 String sql = "{call PROGRAMMINGII.UpdateProduct(?, ?, ?, ?)}";
+		 try (CallableStatement stmt = connection.prepareCall(sql)) {
+			 stmt.setInt(1, producto.getReferencia());
+			 stmt.setString(2, producto.getNombre());
+			 stmt.setDouble(3, producto.getPrecio());
+			 stmt.setInt(4, producto.getCantidad());
+			 stmt.executeUpdate();
+
+		} catch (SQLException e) {
+
+		e.printStackTrace();
+
+		Main.showAlert("Database Error", "Database Error", e.getMessage(), AlertType.ERROR);
+
+
+
+		}
+
+		       
+
+		   }
 	
 	public boolean authenticate(int referencia) {
 	       //String sql = "SELECT * FROM ProgrammingII.Usuario WHERE nickname=? AND contraseña=? AND rol=?";
